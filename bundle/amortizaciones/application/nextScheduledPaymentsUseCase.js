@@ -1,7 +1,7 @@
 const repository = require('../infrastructure/repository/nexShedulePaymentsRepository')
 const useCase = require('../application/sendEmailsAlertPaymentUseCase')
-module.exports = (Postgres) => {
-  return repository(Postgres).then(response => {
+module.exports = () => {
+  return repository().then(response => {
     for (const responseElement of response) {
       const mail = {
         title: `Alerta de pago`,
