@@ -14,10 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Prueba.init({
-    name: DataTypes.STRING
+    obligationNumber: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Prueba',
+    tableName:'AmortizationsPaymentsPending'
   });
   return Prueba;
 };
