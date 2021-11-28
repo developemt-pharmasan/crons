@@ -8,7 +8,7 @@ const sendEmails = async (data) => {
         if (err) throw err
         const email = {
             from: process.env.AMORTIZATIONS_EMAIL, // sender address
-            to: "go.juangomez23@gmail.com", // list of receivers
+            to: "sensapp@pharmasan.co", // list of receivers
             subject: `Reporte de incidencias`, // Subject line
             text: ``, // plain text body
             html
