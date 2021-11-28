@@ -1,5 +1,21 @@
 const connectionMongoUseCase = require('./mongo.connection.useCase');
 const days = require('dayjs')
+const { sendMail } = require('../../../libs/mail')
+const ejs = require('ejs')
+const path = require('path')
+const sendEmails = async (data) => {
+    ejs.renderFile(path.resolve(__dirname, '..', 'views', 'mails', 'incidesncia.por.hora.ejs'), {data}, {}, async (err, html) => {
+        if (err) throw err
+        const email = {
+            from: process.env.AMORTIZATIONS_EMAIL, // sender address
+            to: "go.juangomez23@gmail.com", // list of receivers
+            subject: `Reporte de incidencias`, // Subject line
+            text: ``, // plain text body
+            html
+        }
+        await sendMail(email)
+    });
+} 
 const getDispositivos = async (models,dispositivoIds) => {
     return await models.Dispositivo.find({
         _id: {
@@ -39,7 +55,6 @@ const correosInformativosUseCase = async () => {
             const sensor = sensoresData.find(sensor => sensor.dispositivoId.toString() === dispositivo._id.toString())
             let insidencias = 0
             for (const [ key, value] of Object.entries(sensor)) {
-                console.log(key, value);
                 const bitacora = dispositivosData.filter(bitacora => bitacora.sensorId === value._id)
                 insidencias += bitacora.length 
             }
@@ -49,7 +64,8 @@ const correosInformativosUseCase = async () => {
                 insidencias
             }
         })
-        console.log(data);
+        await sendEmails(data)
+        console.log('Correos enviados');
         disconnect()
     } catch (error) {
         console.log(error)
