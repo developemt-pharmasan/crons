@@ -8,6 +8,6 @@ cron.schedule('0 7 * * *',nextScheduledPaymentsUseCase) // produccion 07:00 am
 
 cron.schedule('0 7 * * *', requestsCreateRankDaysAlertUseCase) // produccion 07:00 am
 
-cron.schedule('* * * * *', correosInformativosUseCase) // produccion 07:00 am
+cron.schedule('* * *', correosInformativosUseCase) // cada hora
 
 
