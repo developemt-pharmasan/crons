@@ -6,7 +6,7 @@ module.exports =  (data) => {
     if (err) throw err
     const email = {
       from: process.env.AMORTIZATIONS_EMAIL, // sender address
-      to: "go.juangomez23@gmail.com", // list of receivers
+      to: "coordinadorcontabilidad@pharmasan.co", // list of receivers
       subject: data.title, // Subject line
       text: data.message, // plain text body
       html
