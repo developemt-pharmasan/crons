@@ -12,4 +12,4 @@ const savefacturacionMasivaSapUseCase = require('./bundle/facturacion_masiva/app
 
 // cron.schedule('* * *', correosInformativosUseCase) // cada hora
 
-// cron.schedule('*/2 * * * *', savefacturacionMasivaSapUseCase) // cada 2 minuto
+// cron.schedule('*/1 * * * *', savefacturacionMasivaSapUseCase) // cada 1 minuto
