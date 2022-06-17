@@ -4,6 +4,7 @@ const nextScheduledPaymentsUseCase = require('./bundle/amortizaciones/applicatio
 const requestsCreateRankDaysAlertUseCase = require('./bundle/compras/application/requestsCreateRankDaysAlertUseCase')
 const { correosInformativosUseCase } = require('./bundle/sensores/application/correos.informativos.useCase')
 const savefacturacionMasivaSapUseCase = require('./bundle/facturacion_masiva/application/savefacturacionMasivaSapUseCase')
+const saveSegfacturacionSapUseCase = require('./bundle/segupharma_facturacion/application/savefacturacionMasivaSapUseCase')
 
 
 // cron.schedule('0 7 * * *',nextScheduledPaymentsUseCase) // produccion 07:00 am
@@ -13,3 +14,5 @@ const savefacturacionMasivaSapUseCase = require('./bundle/facturacion_masiva/app
 // cron.schedule('* * *', correosInformativosUseCase) // cada hora
 
 // cron.schedule('*/1 * * * *', savefacturacionMasivaSapUseCase) // cada 1 minuto
+
+// cron.schedule('*/1 * * * *', saveSegfacturacionSapUseCase) // cada 1 minuto
