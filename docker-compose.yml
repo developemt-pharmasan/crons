@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  app_crons_intranetv2:
+    build: .
+    command: npm run start
+    env_file: .env
+    restart: always
+    ports:
+      - "${APP_PORT}:3000"
+    volumes:
+      - ./:/usr/app
+      - /usr/app/node_modules
+    networks:
+      - intranetv2_network
+
+networks:
+  intranetv2_network:
+    external: true
