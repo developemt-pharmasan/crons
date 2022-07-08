@@ -1,11 +1,10 @@
 const repository = require('../infrastructure/repository/listarFacturacionMasivaRepository')
 const updateRepository = require('../infrastructure/repository/updateFacturacionMasivaResponseSapRepository')
+const {Sequelize, sequelize} = require('../../../database/models')
 const updateFacturacionMasivaResponseDetalleOvSapRepository = require('../infrastructure/repository/updateFacturacionMasivaResponseDetalleOvSapRepository')
 const axios = require("axios");
-
 module.exports = () => {
   return repository().then(async facturacioMasivasDetalle => {
-    console.log(facturacioMasivasDetalle, 'responseeeee');
     let promises = []
     for (const item of facturacioMasivasDetalle) {
       const options = {
@@ -15,6 +14,18 @@ module.exports = () => {
         headers: { 'Content-Type': 'application/json' },
         data: item.json
       };
+      
+      
+      const updateServiceLayer = async() => {
+        const sql = `update "FacturacionMasivaDetalles" 
+        set 
+        "serviceLayer" = true
+        where id = ${item.id}`
+        return await sequelize.query(sql, {
+          type: Sequelize.QueryTypes.SELECT
+        })
+      }
+      await updateServiceLayer()()
       
       const responseSap = await axios.request(options)
       .catch((error) => {
