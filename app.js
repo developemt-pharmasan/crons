@@ -13,6 +13,6 @@ const saveSegfacturacionSapUseCase = require('./bundle/segupharma_facturacion/ap
 
 // cron.schedule('* * *', correosInformativosUseCase) // cada hora
 
-// cron.schedule('*/1 * * * *', savefacturacionMasivaSapUseCase) // cada 1 minuto
+cron.schedule('*/1 * * * *', savefacturacionMasivaSapUseCase) // cada 1 minuto
 
 // cron.schedule('*/1 * * * *', saveSegfacturacionSapUseCase) // cada 1 minuto
