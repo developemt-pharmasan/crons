@@ -15,17 +15,10 @@ module.exports = () => {
         data: item.json
       };
       
-      
-      const updateServiceLayer = async() => {
-        const sql = `update "FacturacionMasivaDetalles" 
-        set 
-        "serviceLayer" = true
-        where id = ${item.id}`
-        return await sequelize.query(sql, {
-          type: Sequelize.QueryTypes.SELECT
-        })
-      }
-      await updateServiceLayer()()
+      const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${item.id}`
+      await sequelize.query(sql, {
+        type: Sequelize.QueryTypes.SELECT
+      })
       
       const responseSap = await axios.request(options)
       .catch((error) => {
@@ -34,7 +27,8 @@ module.exports = () => {
           id: item.id,
           NumFacturaResponse: null,
           response: error.response.data.Descripcion,
-          estado: 2
+          estado: 2,
+          serviceLayer: false
         })
         promises.push(responseDetalle)
 
@@ -55,7 +49,8 @@ module.exports = () => {
           id: item.id,
           NumFacturaResponse: responseSap.data.DocNum ? responseSap.data.DocNum : null,
           response: responseSap.data.Descripcion,
-          estado: responseSap.data.DocNum ? 1 : 2
+          estado: responseSap.data.DocNum ? 1 : 2,
+          serviceLayer: false
         })
         promises.push(responseDetalle)
 
