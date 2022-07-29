@@ -1,10 +1,10 @@
 require('dotenv').config()
 const cron = require('node-cron')
-const nextScheduledPaymentsUseCase = require('./bundle/amortizaciones/application/nextScheduledPaymentsUseCase')
-const requestsCreateRankDaysAlertUseCase = require('./bundle/compras/application/requestsCreateRankDaysAlertUseCase')
-const { correosInformativosUseCase } = require('./bundle/sensores/application/correos.informativos.useCase')
+// const nextScheduledPaymentsUseCase = require('./bundle/amortizaciones/application/nextScheduledPaymentsUseCase')
+// const requestsCreateRankDaysAlertUseCase = require('./bundle/compras/application/requestsCreateRankDaysAlertUseCase')
+// const { correosInformativosUseCase } = require('./bundle/sensores/application/correos.informativos.useCase')
 const savefacturacionMasivaSapUseCase = require('./bundle/facturacion_masiva/application/savefacturacionMasivaSapUseCase')
-const saveSegfacturacionSapUseCase = require('./bundle/segupharma_facturacion/application/savefacturacionMasivaSapUseCase')
+// const saveSegfacturacionSapUseCase = require('./bundle/segupharma_facturacion/application/savefacturacionMasivaSapUseCase')
 
 
 // cron.schedule('0 7 * * *',nextScheduledPaymentsUseCase) // produccion 07:00 am
