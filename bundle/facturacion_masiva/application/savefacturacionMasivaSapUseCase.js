@@ -9,7 +9,6 @@ module.exports = () => {
     for (const item of facturacioMasivasDetalle) {
       const options = {
         method: 'POST',
-        // url: 'http://192.168.1.4:13027/Api/DocumentMarketing',
         url: process.env.FACTURACION_HOST,
         headers: { 'Content-Type': 'application/json' },
         data: item.json
@@ -42,7 +41,7 @@ module.exports = () => {
 
       });
 
-      console.log(responseSap, 'responseSap');
+      console.log({responseSap});
 
       if (responseSap) {
         const responseDetalle = updateRepository({
