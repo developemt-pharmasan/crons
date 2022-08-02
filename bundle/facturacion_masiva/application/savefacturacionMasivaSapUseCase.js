@@ -21,7 +21,7 @@ module.exports = () => {
       
       const responseSap = await axios.request(options)
       .catch((error) => {
-        console.error(error.response, 'error.response');
+        // console.error(error.response, 'error.response');
         const responseDetalle = updateRepository({
           id: item.id,
           NumFacturaResponse: null,
@@ -41,9 +41,8 @@ module.exports = () => {
 
       });
 
-      console.log({responseSap});
-
       if (responseSap) {
+
         const responseDetalle = updateRepository({
           id: item.id,
           NumFacturaResponse: responseSap.data.DocNum ? responseSap.data.DocNum : null,
@@ -52,20 +51,21 @@ module.exports = () => {
           serviceLayer: false
         })
         promises.push(responseDetalle)
-
         const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
           facturacionMasivaDetalleId: item.id,
           NumFactura: responseSap.data.DocNum ? responseSap.data.DocNum : null,
           Comentarios: responseSap.data.Descripcion,
           Estado: responseSap.data.DocNum ? 1 : 2
         })
+
+        console.log("FACTURA DE CAPITA GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
         promises.push(responseDetalleOv)
 
       }
     }
 
-    Promise.all(promises).then(res=>{
-      console.log(res);
+    Promise.all(promises).then((res) =>{
+      //console.log(res);
     })
 
   }).catch(err => console.error(err))
