@@ -1,6 +1,5 @@
 const {Sequelize, sequelize} = require("../../../../database/models");
 module.exports = async () => {
-  console.log({ conn: sequelize.config })
   const options = {
     type: Sequelize.QueryTypes.SELECT,
     replacements: {},
