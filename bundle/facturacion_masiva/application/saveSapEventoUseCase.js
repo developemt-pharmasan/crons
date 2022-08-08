@@ -20,7 +20,7 @@ module.exports = () => {
         NumFacturaResponse: responseSap.data.DocNum ? responseSap.data.DocNum : null,
         response: responseSap.data.Descripcion,
         estado: responseSap.data.DocNum ? 1 : 2,
-        // serviceLayer: false
+        serviceLayer: false
       })
       await updateFacturacionMasivaResponseDetalleOvSapRepository({
         facturacionMasivaDetalleId: factura.id,
