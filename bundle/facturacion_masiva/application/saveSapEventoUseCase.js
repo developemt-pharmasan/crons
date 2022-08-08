@@ -33,8 +33,10 @@ module.exports = () => {
       if(err.response){
         const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response" = ${JSON.stringify(err.response)} where id = ${factura.id}`
         sequelize.query(sql)
-      }
-      throw err      
+      } else {
+        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response" = ${JSON.stringify(err)} where id = ${factura.id}`
+        sequelize.query(sql)
+      }          
     })
   }).catch(err => console.log({err}))
 }
