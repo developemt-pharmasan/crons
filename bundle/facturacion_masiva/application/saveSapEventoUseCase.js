@@ -12,15 +12,15 @@ module.exports = () => {
       headers: { 'Content-Type': 'application/json' },
       data: factura.json
     };
-    const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${factura.id}`
-    await sequelize.query(sql)
+    // const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${factura.id}`
+    // await sequelize.query(sql)
     return  axios.request(options).then(async (responseSap) => {
       await updateRepository({
         id: factura.id,
         NumFacturaResponse: responseSap.data.DocNum ? responseSap.data.DocNum : null,
         response: responseSap.data.Descripcion,
         estado: responseSap.data.DocNum ? 1 : 2,
-        serviceLayer: false
+        // serviceLayer: false
       })
       await updateFacturacionMasivaResponseDetalleOvSapRepository({
         facturacionMasivaDetalleId: factura.id,
@@ -29,8 +29,6 @@ module.exports = () => {
         Estado: responseSap.data.DocNum ? 1 : 2
       })
       console.log("FACTURA DE EVENTO GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
-
-
     }).catch((err) => {
       const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false where id = ${factura.id}`
       sequelize.query(sql)
