@@ -30,9 +30,11 @@ module.exports = () => {
       })
       console.log("FACTURA DE EVENTO GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
     }).catch((err) => {
-      const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false where id = ${factura.id}`
-      sequelize.query(sql)
-      throw err
+      if(err.response){
+        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response" = ${JSON.stringify(err.response)} where id = ${factura.id}`
+        sequelize.query(sql)
+      }
+      throw err      
     })
   }).catch(err => console.log({err}))
 }
