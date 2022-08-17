@@ -6,15 +6,14 @@ const updateFacturacionMasivaResponseDetalleOvSapRepository = require("../infras
 module.exports = () => {
   return factMaxDetEvt().then(async (factura) => {
     if(!factura)  return console.log('NO HAY FACTURAS EVENTO POR ENVIAR A SAP')
-    console.log({ factura })
     const options = {
       method: 'POST',
       url: process.env.FACTURACION_HOST,
       headers: { 'Content-Type': 'application/json' },
       data: factura.json
     };
-    const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${factura.id}`
-    await sequelize.query(sql)
+    // const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${factura.id}`
+    // await sequelize.query(sql)
     return  axios.request(options).then(async (responseSap) => {
       await updateRepository({
         id: factura.id,
@@ -29,10 +28,16 @@ module.exports = () => {
         Comentarios: responseSap.data.Descripcion,
         Estado: responseSap.data.DocNum ? 1 : 2
       })
+      console.log("FACTURA DE EVENTO GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
     }).catch((err) => {
-      const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false where id = ${factura.id}`
-      sequelize.query(sql)
-      throw err
+      if(err.response){
+        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2 where id = ${factura.id}`
+        sequelize.query(sql)
+      } else {
+        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2 where id = ${factura.id}`
+        sequelize.query(sql)
+      }
+      return null
     })
-  }).catch(err => console.log({err}))
+  })
 }
