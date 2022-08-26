@@ -32,13 +32,15 @@ module.exports = () => {
     }).catch((err) => {
       if(err.response){
         console.log({err1: err.response})
-        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2 where id = ${factura.id}`
+        const mensage = err.response.data ? err.response.data.Descripcion : 'ERROR INDEFINIDO EN SAP'
+        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = ${mensage} where id = ${factura.id}`
         sequelize.query(sql)
         const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2 where "facturacionMasivaDetalleId" = ${factura.id}`
         sequelize.query(sql1)
       } else {
         console.log({err})
-        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2 where id = ${factura.id}`
+        const mensage = JSON.stringify(err)
+        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = ${mensage} where id = ${factura.id}`
         sequelize.query(sql)
         const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2 where "facturacionMasivaDetalleId" = ${factura.id}`
         sequelize.query(sql1)
