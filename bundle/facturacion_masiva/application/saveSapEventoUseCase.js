@@ -31,8 +31,8 @@ module.exports = () => {
       console.log("FACTURA DE EVENTO GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
     }).catch((err) => {
       if(err.response){
-        console.log({err1: err.response})
-        const mensage = err.response.data ? err.response.data.Descripcion : 'ERROR INDEFINIDO EN SAP'
+        //console.log({err1: err.response})
+        const mensage = JSON.stringify(err.response.data)
         const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = ${mensage} where id = ${factura.id}`
         sequelize.query(sql)
         const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2 where "facturacionMasivaDetalleId" = ${factura.id}`
