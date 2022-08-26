@@ -32,15 +32,15 @@ module.exports = () => {
     }).catch((err) => {
       if(err.response){
         //console.log({err1: err.response})
-        const mensage = JSON.stringify(err.response.data)
-        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = ${mensage} where id = ${factura.id}`
+        const mensage = err.response.data.Descripcion
+        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = '${mensage}' where id = ${factura.id}`
         sequelize.query(sql)
         const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2 where "facturacionMasivaDetalleId" = ${factura.id}`
         sequelize.query(sql1)
       } else {
         console.log({err})
         const mensage = JSON.stringify(err)
-        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = ${mensage} where id = ${factura.id}`
+        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = '${mensage}' where id = ${factura.id}`
         sequelize.query(sql)
         const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2 where "facturacionMasivaDetalleId" = ${factura.id}`
         sequelize.query(sql1)
