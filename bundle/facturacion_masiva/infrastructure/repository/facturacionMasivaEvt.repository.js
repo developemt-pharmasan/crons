@@ -10,7 +10,7 @@ module.exports = async () => {
     t0.*
     from "FacturacionMasivaDetalles" t0
     inner join "FacturacionMasivas" t1 on t0."facturacionMasivaId" = t1."id" and t1."tipoFacturacionMasiva" in (1)
-    where (t0."estado" = 0 or t0."estado" is null)
+    where (t0."estado" = 0 or t0."estado" is null) and t0."NumFacturaResponse" is null 
       and (
             select count(s1."id")
             from "FacturacionMasivaDetalles" s1
