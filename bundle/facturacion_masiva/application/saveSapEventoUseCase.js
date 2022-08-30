@@ -31,7 +31,7 @@ module.exports = () => {
       console.log("FACTURA DE EVENTO GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
     }).catch((err) => {
       if(err.response){
-        //console.log({err1: err.response})
+        console.log("ERROR en SAP")
         const mensage = err.response.data.Descripcion
         const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = '${mensage}' where id = ${factura.id}`
         sequelize.query(sql)
