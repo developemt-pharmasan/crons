@@ -1,6 +1,6 @@
 const factMaxDetEvt = require('../infrastructure/repository/facturacionMasivaEvt.repository')
 const axios = require("axios");
-const {sequelize, Sequelize} = require("../../../database/models");
+const {sequelize} = require("../../../database/models");
 const updateRepository = require("../infrastructure/repository/updateFacturacionMasivaResponseSapRepository");
 const updateFacturacionMasivaResponseDetalleOvSapRepository = require("../infrastructure/repository/updateFacturacionMasivaResponseDetalleOvSapRepository");
 module.exports = () => {
@@ -31,11 +31,19 @@ module.exports = () => {
       console.log("FACTURA DE EVENTO GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
     }).catch((err) => {
       if(err.response){
-        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2 where id = ${factura.id}`
+        console.log("ERROR en SAP")
+        const mensage = err.response.data.Descripcion
+        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = '${mensage}' where id = ${factura.id} and "NumFacturaResponse" is null`
         sequelize.query(sql)
+        const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2, "Comentarios"  = '${mensage}'   where "facturacionMasivaDetalleId" = ${factura.id} and "NumFactura" is null`
+        sequelize.query(sql1)
       } else {
-        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2 where id = ${factura.id}`
+        console.log("ERROR en SAP indefinido ",JSON.stringify(err))
+        const mensage = JSON.stringify(err)
+        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = '${mensage}' where id = ${factura.id} and "NumFacturaResponse" is null`
         sequelize.query(sql)
+        const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2, "Comentarios"  = '${mensage}'   where "facturacionMasivaDetalleId" = ${factura.id} and "NumFactura" is null`
+        sequelize.query(sql1)
       }
       return null
     })

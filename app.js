@@ -16,6 +16,6 @@ const saveSapEvento = require('./bundle/facturacion_masiva/application/saveSapEv
 
 console.log('start...')
 cron.schedule('*/1 * * * *', savefacturacionMasivaSapUseCase) // cada 1 minuto
-cron.schedule('*/15 * * * * *', saveSapEvento) // cada 15 segundos
+cron.schedule('* * * * * *', saveSapEvento) // cada 15 segundos
 
 // cron.schedule('*/1 * * * *', saveSegfacturacionSapUseCase) // cada 1 minuto
