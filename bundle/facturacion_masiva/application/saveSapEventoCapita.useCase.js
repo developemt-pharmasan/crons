@@ -1,11 +1,11 @@
-const factMaxDetEvt = require('../infrastructure/repository/facturacionMasivaEvt.repository')
+const factMaxDetEvt = require('../infrastructure/repository/facturacionEventoCapita.repository')
 const axios = require("axios");
 const {sequelize} = require("../../../database/models");
 const updateRepository = require("../infrastructure/repository/updateFacturacionMasivaResponseSapRepository");
 const updateFacturacionMasivaResponseDetalleOvSapRepository = require("../infrastructure/repository/updateFacturacionMasivaResponseDetalleOvSapRepository");
 module.exports = () => {
   return factMaxDetEvt().then(async (factura) => {
-    if(!factura)  return console.log('NO HAY FACTURAS EVENTO POR ENVIAR A SAP')
+    if(!factura)  return console.log('NO HAY FACTURAS EVENTO/CAPITA POR ENVIAR A SAP')
     const options = {
       method: 'POST',
       url: process.env.FACTURACION_HOST,
