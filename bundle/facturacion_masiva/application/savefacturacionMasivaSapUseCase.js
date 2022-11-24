@@ -5,6 +5,7 @@ const updateFacturacionMasivaResponseDetalleOvSapRepository = require('../infras
 const axios = require("axios");
 module.exports = () => {
   return repository().then(async facturacioMasivasDetalle => {
+    if(!facturacioMasivasDetalle)  return console.log('NO HAY FACTURAS CAPITA POR ENVIAR A SAP')
     let promises = []
     for (const item of facturacioMasivasDetalle) {
       const options = {
