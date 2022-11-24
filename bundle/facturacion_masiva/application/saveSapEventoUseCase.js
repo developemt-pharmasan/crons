@@ -29,23 +29,29 @@ module.exports = () => {
         Estado: responseSap.data.DocNum ? 1 : 2
       })
       console.log("FACTURA DE EVENTO GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
-    }).catch((err) => {
-      if(err.response){
-        console.log("ERROR en SAP")
-        const mensage = err.response.data.Descripcion
+    }).catch((error) => {
+      if (error.response) {
+          // console.log(error.response.data);
+          const mensage = error.response.data.Descripcion ?? 'SAP - ERROR UNDEFINED'
+          const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = '${mensage}' where id = ${factura.id} and "NumFacturaResponse" is null`
+          sequelize.query(sql)
+          const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2, "Comentarios"  = '${mensage}'   where "facturacionMasivaDetalleId" = ${factura.id} and "NumFactura" is null`
+          sequelize.query(sql1)
+      } else if (error.request) {
+        // console.log(error.request);
+        const mensage = error.request.message ?? 'SAP - ERROR UNDEFINED'
         const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = '${mensage}' where id = ${factura.id} and "NumFacturaResponse" is null`
         sequelize.query(sql)
         const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2, "Comentarios"  = '${mensage}'   where "facturacionMasivaDetalleId" = ${factura.id} and "NumFactura" is null`
         sequelize.query(sql1)
       } else {
-        console.log("ERROR en SAP indefinido ",JSON.stringify(err))
-        const mensage = JSON.stringify(err)
+        // console.log('Error', error.message);
+        const mensage = error.message
         const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = '${mensage}' where id = ${factura.id} and "NumFacturaResponse" is null`
         sequelize.query(sql)
         const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2, "Comentarios"  = '${mensage}'   where "facturacionMasivaDetalleId" = ${factura.id} and "NumFactura" is null`
         sequelize.query(sql1)
       }
-      return null
     })
   })
 }
