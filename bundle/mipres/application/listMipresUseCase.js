@@ -4,7 +4,7 @@ const dayjs = require('dayjs')
 // const { MipresDireccionamiento } = require('../../../database/models')
 const repoSaveMipres = require('../infrastructure/repository/saveMipres.repository')
 const repoProgMipres = require('../infrastructure/repository/programar_mipres.repository')
-const listDireccionamientos = require('../infrastructure/repository/listDireccionamientos.repository')
+const listDireccionamientos = require('../infrastructure/repository/listaDireccionamientos.repository')
 
 module.exports = async ({ user}) => {
     try {
