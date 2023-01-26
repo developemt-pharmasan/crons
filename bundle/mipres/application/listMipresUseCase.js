@@ -15,11 +15,9 @@ module.exports = async ({ user}) => {
             // reporte entrega direccionamiento en el webservice
             const fecha = dayjs().format('YYYY-MM-DD')
             axiosWebService(`${baseUrl}/${nit}/${tokken_secundario}/${fecha}`).then((data) => {
-                // console.log('listDireccionamientos-----', fecha)
                 const Direccionamientos = listDireccionamientos(fecha)
                 var data_fill = []
                 Direccionamientos.then((ids) => {
-                    // console.log('ids--------------------------', ids)
                     var rest = ''
                     for (const i of data) {
                         rest = ids.find(el => el.ID == i.ID)
@@ -28,12 +26,9 @@ module.exports = async ({ user}) => {
                             data_fill.push(i)
                         }
                     }
-                    // console.log('data-id- save------', data_fill);
                     return repoSaveMipres(data_fill).then((data) => {
-                            // console.log('enviando data a prog.--------', data)
                         return repoProgMipres(data)
                     }).catch(e => console.log('Error en la Entrega----------', e))
-                    // console.log('fin--------------------------------')
                 })
             })
         }

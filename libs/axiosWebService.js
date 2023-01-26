@@ -1,5 +1,5 @@
 const orm = require('../database/orm/raw.orm')
-const axios = require('axios')
+const axios = require('./axios')
 module.exports = async (url, method = 'GET', data = {}) => {
         // const { data: response } = await
          return axios.request({ method, url, data }).then(({data}) => {
