@@ -32,14 +32,14 @@ module.exports = () => {
     }).catch((error) => {
       if (error.response) {
           // console.log(error.response.data);
-          const mensage = error.response.data.Descripcion ?? 'SAP - ERROR UNDEFINED'
+          const mensage = error.response.data.Descripcion ?? 'ERROR: code: 666 ; message: Problemas para conectar con SAP'
           const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = '${mensage}' where id = ${factura.id} and "NumFacturaResponse" is null`
           sequelize.query(sql)
           const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2, "Comentarios"  = '${mensage}'   where "facturacionMasivaDetalleId" = ${factura.id} and "NumFactura" is null`
           sequelize.query(sql1)
       } else if (error.request) {
         // console.log(error.request);
-        const mensage = error.request.message ?? 'SAP - ERROR UNDEFINED'
+        const mensage = error.request.message ?? 'ERROR: code: 666 ; message: Problemas para conectar con SAP'
         const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = '${mensage}' where id = ${factura.id} and "NumFacturaResponse" is null`
         sequelize.query(sql)
         const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2, "Comentarios"  = '${mensage}'   where "facturacionMasivaDetalleId" = ${factura.id} and "NumFactura" is null`
