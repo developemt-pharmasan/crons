@@ -19,9 +19,9 @@ const saveFacturacionMasivaEventoCapita = require('./bundle/facturacion_masiva/a
 // cron.schedule('* * *', correosInformativosUseCase) // cada hora
 
 console.log('start...')
-cron.schedule('*/1 * * * *', savefacturacionMasivaCapita) // cada 1 minuto
-cron.schedule('* * * * * *', saveSapEvento) // cada 15 segundos
-cron.schedule('* * * * * *', saveFacturacionMasivaEventoCapita)
+cron.schedule('*/15 * * * *', savefacturacionMasivaCapita) // cada 1 minuto
+cron.schedule('*/20 * * * * *', saveSapEvento) // cada 15 segundos
+cron.schedule('*/20 * * * * *', saveFacturacionMasivaEventoCapita)
 
 // cron.schedule('*/1 * * * *', saveSegfacturacionSapUseCase) // cada 1 minuto
 
