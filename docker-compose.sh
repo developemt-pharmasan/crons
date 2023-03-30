@@ -1,0 +1,1 @@
+docker-compose down && docker-compose up -d --build && docker system prune --all --force --volumes && docker-compose ps && docker-compose logs -f
