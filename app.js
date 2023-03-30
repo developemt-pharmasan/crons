@@ -18,9 +18,12 @@ const reporteEntregaFecha = require('./bundle/mipres/application/reporteEntregaM
 // cron.schedule('* * *', correosInformativosUseCase) // cada hora
 
 console.log('start...')
-cron.schedule('*/1 * * * *', savefacturacionMasivaCapita) // cada 1 minuto
+cron.schedule('*/2 * * * 1-5', savefacturacionMasivaCapita) // cada 1 minuto
+cron.schedule('*/50 * * * * 6,0', savefacturacionMasivaCapita) // cada 50 segundos sabado y domingo
 // cron.schedule('* * * * * *', saveSapEvento) // cada 15 segundos
 // cron.schedule('* * * * * *', saveFacturacionMasivaEventoCapita)
+
+
 // cron.schedule('*/1 * * * *', saveSegfacturacionSapUseCase) // cada 1 minuto
 cron.schedule('0 7 * * *', saveMipres) // diariamente 07:00 am
 cron.schedule('0 12 * * *', saveMipres) // diariamente 07:00 am
