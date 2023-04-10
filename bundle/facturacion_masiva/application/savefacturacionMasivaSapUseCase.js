@@ -7,6 +7,7 @@ module.exports = () => {
   return repository().then(async facturacioMasivasDetalle => {
     console.log('facturacioMasivasDetalle', facturacioMasivasDetalle);
     if(!facturacioMasivasDetalle)  return console.log('NO HAY FACTURAS CAPITA POR ENVIAR A SAP')
+    if(!facturacioMasivasDetalle.length)  return console.log('NO HAY FACTURAS CAPITA POR ENVIAR A SAP')
     let promises = []
     for (const item of facturacioMasivasDetalle) {
       const options = {
@@ -20,6 +21,7 @@ module.exports = () => {
       await sequelize.query(sql, {
         type: Sequelize.QueryTypes.SELECT
       })
+      console.log('procesando id----', facturacioMasivasDetalle)
       
       const responseSap = await axios.request(options)
       .catch((error) => {

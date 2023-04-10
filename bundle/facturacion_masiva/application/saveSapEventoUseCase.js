@@ -12,8 +12,9 @@ module.exports = () => {
       headers: { 'Content-Type': 'application/json' },
       data: factura.json
     };
-    // const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${factura.id}`
-    // await sequelize.query(sql)
+    const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${factura.id}`
+    await sequelize.query(sql)
+    console.log('procesando id----', factura.id)
     return  axios.request(options).then(async (responseSap) => {
       await updateRepository({
         id: factura.id,

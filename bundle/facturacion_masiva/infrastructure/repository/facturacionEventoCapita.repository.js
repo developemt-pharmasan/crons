@@ -24,7 +24,6 @@ module.exports = async () => {
         "FacturacionMasivaDetalles" s1
       inner join "FacturacionMasivas" s2 on
         s1."facturacionMasivaId" = s2."id"
-        and s2."tipoFacturacionMasiva" in (2)
       where
         s1."serviceLayer" = true
         and (s1."estado" = 0
