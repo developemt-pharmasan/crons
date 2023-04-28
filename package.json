@@ -25,6 +25,7 @@
     "dayjs": "^1.10.6",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
+    "hdb-pool": "^0.1.6",
     "moment": "^2.29.1",
     "mongoose": "^6.0.13",
     "node-cron": "^3.0.0",
@@ -32,7 +33,8 @@
     "nodemailer": "^6.6.3",
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.6.5"
+    "sequelize": "^6.6.5",
+    "typeorm": "^0.3.11"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"

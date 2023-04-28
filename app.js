@@ -6,6 +6,7 @@ const cron = require('node-cron')
 const savefacturacionMasivaCapita = require('./bundle/facturacion_masiva/application/savefacturacionMasivaSapUseCase') // CAPITA
 const saveSapEvento = require('./bundle/facturacion_masiva/application/saveSapEventoUseCase')
 const saveFacturacionMasivaEventoCapita = require('./bundle/facturacion_masiva/application/saveSapEventoCapita.useCase')
+const crearEntradasMercancia = require('./bundle/recepcion_pedidos/application/crearEntradaMercancia')
 // const saveSegfacturacionSapUseCase = require('./bundle/segupharma_facturacion/application/savefacturacionMasivaSapUseCase')
 // const saveMipres = require('./bundle/mipres/application/listMipresUseCase')
 // const reporteEntregaFecha = require('./bundle/mipres/application/reporteEntregaMipresUseCase')
@@ -19,6 +20,7 @@ const saveFacturacionMasivaEventoCapita = require('./bundle/facturacion_masiva/a
 // cron.schedule('* * *', correosInformativosUseCase) // cada hora
 
 console.log('start...')
+cron.schedule('*/5 * * * *', crearEntradasMercancia)
 cron.schedule('*/2 * * * 1-5', savefacturacionMasivaCapita) // cada 1 minuto
 cron.schedule('*/50 * * * * 6,0', savefacturacionMasivaCapita) // cada 50 segundos sabado y domingo
 cron.schedule('* * * * * *', saveSapEvento) // cada segundo
