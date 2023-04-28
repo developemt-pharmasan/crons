@@ -1,7 +1,8 @@
 version: '3'
 
 services:
-  app_crons_intranetv2:
+  test-crons-service:
+    container_name: test-crons-service
     build: .
     command: npm run start
     env_file: .env
@@ -12,8 +13,8 @@ services:
       - ./:/usr/app
       - /usr/app/node_modules
     networks:
-      - intranetv2_network
+      - traefik-network
 
 networks:
-  intranetv2_network:
+  traefik-network:
     external: true

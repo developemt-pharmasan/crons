@@ -13,12 +13,13 @@ module.exports = {
     }
   },
   test: {
-    username: process.env.CI_DB_USERNAME,
-    password: process.env.CI_DB_PASSWORD,
-    database: process.env.CI_DB_NAME,
-    host: '127.0.0.1',
-    port: process.env.CI_DB_PORT,
+    username: process.env.TEST_DB_USERNAME,
+    password: process.env.TEST_DB_PASSWORD,
+    database: process.env.TEST_DB_NAME,
+    host: process.env.TEST_DB_HOSTNAME,
+    port: process.env.TEST_DB_PORT,
     dialect: 'postgres',
+    logging: false,
     dialectOptions: {
       bigNumberStrings: true
     }
