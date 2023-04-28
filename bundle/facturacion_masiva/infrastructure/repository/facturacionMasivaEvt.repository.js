@@ -14,7 +14,7 @@ module.exports = async () => {
       and (
             select count(s1."id")
             from "FacturacionMasivaDetalles" s1
-                   inner join "FacturacionMasivas" s2 on s1."facturacionMasivaId" = s2."id" and s2."tipoFacturacionMasiva" in (2,3)
+                   inner join "FacturacionMasivas" s2 on s1."facturacionMasivaId" = s2."id"
             where s1."serviceLayer" = true  and (s1."estado" = 0 or s1."estado" is null)
           ) = 0
     order by t0."id"
