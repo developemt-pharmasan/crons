@@ -13,6 +13,7 @@ const obtenerLineasDocumento = async(ordenes) => {
 const crearJson = async (grupo) => {
   const ordenes = await obtenerOrdenesRepositorio(grupo.id)
   let DocumentLines = await obtenerLineasDocumento(ordenes)
+  if (!DocumentLines.length) return 'Error al facturar, revisa si estas ordenes ya cuenta con una factura'
   const monto_linea_capita = (lineas) => {
     let res = 0
     lineas.forEach(element => {
@@ -42,59 +43,79 @@ module.exports = () => {
     let promises = []
     for (const item of facturacioMasivasDetalle) {
       const json = await crearJson(item)
-      const options = {
-        method: 'POST',
-        url: process.env.FACTURACION_HOST,
-        headers: { 'Content-Type': 'application/json' },
-        data: json
-      };
-      
-      const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${item.id}`
-      await sequelize.query(sql, {
-        type: Sequelize.QueryTypes.SELECT
-      })
-      
-      const responseSap = await axios.request(options)
-      .catch((error) => {
+      if (json === 'Error al facturar, revisa si estas ordenes ya cuenta con una factura') {
         const responseDetalle = updateRepository({
           id: item.id,
           NumFacturaResponse: null,
-          response: error.response.data.Descripcion,
+          response: json,
           estado: 2,
           serviceLayer: false
         })
         promises.push(responseDetalle)
-
         const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
           facturacionMasivaDetalleId: item.id,
           NumFactura: null,
-          Comentarios: error.response.data.Descripcion,
+          Comentarios: json,
           Estado: 2
-        })
-        promises.push(responseDetalleOv)
-
-      });
-
-      if (responseSap) {
-
-        const responseDetalle = updateRepository({
-          id: item.id,
-          NumFacturaResponse: responseSap.data.DocNum ? responseSap.data.DocNum : null,
-          response: responseSap.data.Descripcion,
-          estado: responseSap.data.DocNum ? 1 : 2,
-          serviceLayer: false
-        })
-        promises.push(responseDetalle)
-        const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
-          facturacionMasivaDetalleId: item.id,
-          NumFactura: responseSap.data.DocNum ? responseSap.data.DocNum : null,
-          Comentarios: responseSap.data.Descripcion,
-          Estado: responseSap.data.DocNum ? 1 : 2
         })
 
         console.log("FACTURA DE CAPITA GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
         promises.push(responseDetalleOv)
-
+      } else {
+        const options = {
+          method: 'POST',
+          url: process.env.FACTURACION_HOST,
+          headers: { 'Content-Type': 'application/json' },
+          data: json
+        };
+        
+        const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${item.id}`
+        await sequelize.query(sql, {
+          type: Sequelize.QueryTypes.SELECT
+        })
+        
+        const responseSap = await axios.request(options)
+        .catch((error) => {
+          const responseDetalle = updateRepository({
+            id: item.id,
+            NumFacturaResponse: null,
+            response: error.response.data.Descripcion,
+            estado: 2,
+            serviceLayer: false
+          })
+          promises.push(responseDetalle)
+  
+          const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
+            facturacionMasivaDetalleId: item.id,
+            NumFactura: null,
+            Comentarios: error.response.data.Descripcion,
+            Estado: 2
+          })
+          promises.push(responseDetalleOv)
+  
+        });
+  
+        if (responseSap) {
+  
+          const responseDetalle = updateRepository({
+            id: item.id,
+            NumFacturaResponse: responseSap.data.DocNum ? responseSap.data.DocNum : null,
+            response: responseSap.data.Descripcion,
+            estado: responseSap.data.DocNum ? 1 : 2,
+            serviceLayer: false
+          })
+          promises.push(responseDetalle)
+          const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
+            facturacionMasivaDetalleId: item.id,
+            NumFactura: responseSap.data.DocNum ? responseSap.data.DocNum : null,
+            Comentarios: responseSap.data.Descripcion,
+            Estado: responseSap.data.DocNum ? 1 : 2
+          })
+  
+          console.log("FACTURA DE CAPITA GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
+          promises.push(responseDetalleOv)
+  
+        }
       }
     }
     Promise.all(promises).then((res) =>{
