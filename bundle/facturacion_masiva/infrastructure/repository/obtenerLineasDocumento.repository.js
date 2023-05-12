@@ -1,6 +1,6 @@
 const {connect,hanaConfig, execute} = require('../../../../database/hanaClient/ordenes')
 module.exports = async (ordenes) => {
-    console.log('estas son las ordenes-->', ordenes)
+    // console.log('estas son las ordenes-->', ordenes)
     return new Promise(async (resolve, reject) => {
         const conn = await connect()
         conn.connect(hanaConfig, async function (err) {

@@ -37,7 +37,7 @@ const crearJson = async (grupo) => {
 }
 module.exports = () => {
   return repository().then(async facturacioMasivasDetalle => {
-    console.log('facturacioMasivasDetalle', facturacioMasivasDetalle);
+    console.log('facturacioMasivasCapita', facturacioMasivasDetalle);
     if(!facturacioMasivasDetalle)  return console.log('NO HAY FACTURAS CAPITA POR ENVIAR A SAP')
     if(!facturacioMasivasDetalle.length)  return console.log('NO HAY FACTURAS CAPITA POR ENVIAR A SAP')
     let promises = []
@@ -59,7 +59,7 @@ module.exports = () => {
           Estado: 2
         })
 
-        console.log("FACTURA DE CAPITA GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
+        // console.log("FACTURA DE CAPITA GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
         promises.push(responseDetalleOv)
       } else {
         const options = {
@@ -74,12 +74,31 @@ module.exports = () => {
           type: Sequelize.QueryTypes.SELECT
         })
         
-        const responseSap = await axios.request(options)
+        const responseSap = await axios.request(options).then(resp => {
+          console.log('la respuesta de la facturacion---then------------', resp)
+          const responseDetalle = updateRepository({
+            id: item.id,
+            NumFacturaResponse: resp.data.DocNum ? resp.data.DocNum : null,
+            response: resp.data.Descripcion,
+            estado: resp.data.DocNum ? 1 : 2,
+            serviceLayer: false
+          })
+          promises.push(responseDetalle)
+          const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
+            facturacionMasivaDetalleId: item.id,
+            NumFactura: resp.data.DocNum ? resp.data.DocNum : null,
+            Comentarios: resp.data.Descripcion,
+            Estado: resp.data.DocNum ? 1 : 2
+          })
+          promises.push(responseDetalleOv)
+          console.log("FACTURA DE CAPITA GENERADA...",resp.data ? resp.data : " FALLO ");
+        })
         .catch((error) => {
+          console.log('catch---error--', error)
           const responseDetalle = updateRepository({
             id: item.id,
             NumFacturaResponse: null,
-            response: error.response.data.Descripcion,
+            response: error.response ? error.response.data.Descripcion : error.data.Descripcion,
             estado: 2,
             serviceLayer: false
           })
@@ -88,38 +107,39 @@ module.exports = () => {
           const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
             facturacionMasivaDetalleId: item.id,
             NumFactura: null,
-            Comentarios: error.response.data.Descripcion,
+            Comentarios: error.response ? error.response.data.Descripcion : error.data.Descripcion,
             Estado: 2
           })
           promises.push(responseDetalleOv)
   
         });
+        console.log('responseSap----------------', responseSap)
   
-        if (responseSap) {
+        // if (responseSap) {
   
-          const responseDetalle = updateRepository({
-            id: item.id,
-            NumFacturaResponse: responseSap.data.DocNum ? responseSap.data.DocNum : null,
-            response: responseSap.data.Descripcion,
-            estado: responseSap.data.DocNum ? 1 : 2,
-            serviceLayer: false
-          })
-          promises.push(responseDetalle)
-          const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
-            facturacionMasivaDetalleId: item.id,
-            NumFactura: responseSap.data.DocNum ? responseSap.data.DocNum : null,
-            Comentarios: responseSap.data.Descripcion,
-            Estado: responseSap.data.DocNum ? 1 : 2
-          })
+          // const responseDetalle = updateRepository({
+          //   id: item.id,
+          //   NumFacturaResponse: responseSap.data.DocNum ? responseSap.data.DocNum : null,
+          //   response: responseSap.data.Descripcion,
+          //   estado: responseSap.data.DocNum ? 1 : 2,
+          //   serviceLayer: false
+          // })
+          // promises.push(responseDetalle)
+          // const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
+          //   facturacionMasivaDetalleId: item.id,
+          //   NumFactura: responseSap.data.DocNum ? responseSap.data.DocNum : null,
+          //   Comentarios: responseSap.data.Descripcion,
+          //   Estado: responseSap.data.DocNum ? 1 : 2
+          // })
   
-          console.log("FACTURA DE CAPITA GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
-          promises.push(responseDetalleOv)
+          // console.log("FACTURA DE CAPITA GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
+          // promises.push(responseDetalleOv)
   
-        }
+        // }
       }
     }
     Promise.all(promises).then((res) =>{
-      //console.log(res);
+      console.log('AQUI TERMINA DE FATURAR-------------------------', res)
     })
 
   }).catch(err => console.error(err))
