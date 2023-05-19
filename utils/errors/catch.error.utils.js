@@ -1,4 +1,5 @@
 module.exports = (error) => {
+    console.log(error)
     let mjs;
     if (error.response) {
         console.log('Error -> response: ', error.response.data);

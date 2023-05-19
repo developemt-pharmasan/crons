@@ -20,7 +20,7 @@ const crearEntradasMercancia = require('./bundle/recepcion_pedidos/application/c
 // cron.schedule('* * *', correosInformativosUseCase) // cada hora
 
 console.log('start...')
-cron.schedule('*/5 * * * *', crearEntradasMercancia)
+cron.schedule('*/1 * * * *', crearEntradasMercancia)
 cron.schedule('*/2 * * * 1-5', savefacturacionMasivaCapita) // cada 1 minuto
 cron.schedule('*/50 * * * * 6,0', savefacturacionMasivaCapita) // cada 50 segundos sabado y domingo
 cron.schedule('* * * * * *', saveSapEvento) // cada segundo
