@@ -2,10 +2,14 @@
 
 const fs = require('fs');
 const path = require('path');
+const dayjs = require("dayjs");
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../../config/database.js')[env];
+const colors = env === 'production'?'\x1b[31m':'\x1b[36m';
+console.log(colors,`[Sequelize]: connexion: ${env}  database: ${config.database} hora: ${dayjs().format('YYYY-MM-DD HH:mm:ss')}`);
+
 const db = {};
 
 let sequelize;
