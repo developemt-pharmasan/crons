@@ -1,4 +1,4 @@
-const factMaxDetEvt = require('../infrastructure/repository/facturacionMasivaEvt.repository')
+const factMaxDetEvt = require('../infrastructure/repository/facturacionPpNOPPS.repository')
 const axios = require("axios");
 const {sequelize} = require("../../../database/models");
 const updateRepository = require("../infrastructure/repository/updateFacturacionMasivaResponseSapRepository");
@@ -8,12 +8,6 @@ module.exports = async () => {
     console.log('factura--------->', factura)
     if(!factura)  throw new Error('NO HAY FACTURAS EVENTO POR ENVIAR A SAP')
     const detalle = factura
-    // const options = {
-    //   method: 'POST',
-    //   url: process.env.FACTURACION_HOST,
-    //   headers: { 'Content-Type': 'application/json' },
-    //   data: factura.json
-    // };
     const options = {
       method: 'POST',
       url: `${process.env.SERVICE_LAYER_HOST}/invoices`,
