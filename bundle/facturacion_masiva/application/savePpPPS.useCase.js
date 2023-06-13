@@ -1,4 +1,4 @@
-const repository = require('../infrastructure/repository/listarFacturacionMasivaRepository')
+const repository = require('../infrastructure/repository/listarFacturacionMasivaRepositoryPpPBS')
 const obtenerOrdenesRepositorio = require('../infrastructure/repository/obtenerOrdenesRepository')
 const updateRepository = require('../infrastructure/repository/updateFacturacionMasivaResponseSapRepository')
 const updateJson = require('../infrastructure/repository/updateJsonCapita.repository')
@@ -41,7 +41,7 @@ module.exports = () => {
   const inicio = dayjs()
   return repository().then(async facturacioMasivasDetalle => {
     console.log('facturacioMasivasCapita', facturacioMasivasDetalle);
-    if(!facturacioMasivasDetalle.length)  return console.log('NO HAY FACTURAS CAPITA POR ENVIAR A SAP')
+    if(!facturacioMasivasDetalle.length)  return console.log('NO HAY FACTURAS PAGO PROSPECTIVO PBS POR ENVIAR A SAP')
     let promises = []
     for (const item of facturacioMasivasDetalle) {
       console.log('se va a mandar------------>', item.id)

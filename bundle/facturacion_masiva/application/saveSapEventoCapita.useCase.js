@@ -6,10 +6,16 @@ const updateFacturacionMasivaResponseDetalleOvSapRepository = require("../infras
 module.exports = () => {
   return factMaxDetEvt().then(async (factura) => {
     if(!factura)  return console.log('NO HAY FACTURAS EVENTO/CAPITA POR ENVIAR A SAP')
+    // const options = {
+    //   method: 'POST',
+    //   url: process.env.FACTURACION_HOST,
+    //   headers: { 'Content-Type': 'application/json' },
+    //   data: factura.json
+    // };
     const options = {
       method: 'POST',
-      url: process.env.FACTURACION_HOST,
-      headers: { 'Content-Type': 'application/json' },
+      url: `${process.env.SERVICE_LAYER_HOST}/invoices`,
+      headers: { 'Content-Type': 'application/json', 'company': 'PRUEBAS_PHARMA', 'module': 'Facturacion masiva', 'type': 'Invoices' },
       data: factura.json
     };
       const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${factura.id}`
@@ -19,21 +25,21 @@ module.exports = () => {
       await updateRepository({
         id: factura.id,
         NumFacturaResponse: responseSap.data.DocNum ? responseSap.data.DocNum : null,
-        response: responseSap.data.Descripcion,
+        response: responseSap.data.DocNum ? 'OK' :responseSap.data.statusText,
         estado: responseSap.data.DocNum ? 1 : 2,
         serviceLayer: false
       })
       await updateFacturacionMasivaResponseDetalleOvSapRepository({
         facturacionMasivaDetalleId: factura.id,
         NumFactura: responseSap.data.DocNum ? responseSap.data.DocNum : null,
-        Comentarios: responseSap.data.Descripcion,
+        Comentarios: responseSap.data.DocNum ? 'OK' :responseSap.data.statusText,
         Estado: responseSap.data.DocNum ? 1 : 2
       })
       console.log("FACTURA DE EVENTO GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
     }).catch((err) => {
       if(err.response){
         console.log("ERROR en SAP")
-        const mensage = err.response.data.Descripcion
+        const mensage = err.response.data.message
         const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = '${mensage}' where id = ${factura.id} and "NumFacturaResponse" is null`
         sequelize.query(sql)
         const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2, "Comentarios"  = '${mensage}'   where "facturacionMasivaDetalleId" = ${factura.id} and "NumFactura" is null`
