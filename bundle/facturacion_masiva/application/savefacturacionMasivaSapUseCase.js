@@ -182,7 +182,7 @@ module.exports = () => {
             const responseDetalle = updateRepository({
               id: item.id,
               NumFacturaResponse: null,
-              response: error.response ? error.response.data.Descripcion : error.data.Descripcion,
+              response: error.response ? error.response.data.message : 'Error desconocido',
               estado: 2,
               serviceLayer: false
             })
@@ -191,7 +191,7 @@ module.exports = () => {
             const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
               facturacionMasivaDetalleId: item.id,
               NumFactura: null,
-              Comentarios: error.response ? error.response.data.Descripcion : error.data.Descripcion,
+              Comentarios: error.response ? error.response.data.message : 'Error desconocido',
               Estado: 2
             })
             promises.push(responseDetalleOv)
@@ -205,7 +205,10 @@ module.exports = () => {
       console.log('AQUI TERMINA DE FATURAR-------------------------', res)
     })
 
-  }).catch(err => console.error(err))
+  }).catch(err => {
+    console.log('ENTRO POR EL CATCH------------>', err)
+    console.error(err)
+  })
 }
 
 
