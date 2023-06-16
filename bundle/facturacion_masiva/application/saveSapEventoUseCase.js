@@ -37,7 +37,7 @@ module.exports = async () => {
         })
         console.log("FACTURA DE EVENTO GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
       }).catch((error) => {
-        console.log('ENTRO POR EL CATCH--->', error.response.data.message)
+        console.log('ENTRO POR EL CATCH--->', error.response)
         if (error.response) {
             // console.log(error.response.data);
             const mensage = error.response.data.message ?? 'ERROR: code: 666 ; message: Problemas para conectar con SAP'
@@ -53,11 +53,9 @@ module.exports = async () => {
           const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2, "Comentarios"  = '${mensage}'   where "facturacionMasivaDetalleId" = ${detalle.id} and "NumFactura" is null`
           sequelize.query(sql1)
         } else {
-          // console.log('Error', error.message);
-          const mensage = error.message
-          const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = '${mensage}' where id = ${detalle.id} and "NumFacturaResponse" is null`
+          const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = false, "estado" = 2, "response"  = 'Error desconocido' where id = ${detalle.id} and "NumFacturaResponse" is null`
           sequelize.query(sql)
-          const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2, "Comentarios"  = '${mensage}'   where "facturacionMasivaDetalleId" = ${detalle.id} and "NumFactura" is null`
+          const sql1 = `update "FacturacionMasivaDetalleOVs" set  "Estado" = 2, "Comentarios"  = 'Error desconocido'   where "facturacionMasivaDetalleId" = ${detalle.id} and "NumFactura" is null`
           sequelize.query(sql1)
         }
       })
