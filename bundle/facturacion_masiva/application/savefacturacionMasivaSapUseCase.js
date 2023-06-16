@@ -40,8 +40,8 @@ const crearJson = async (grupo) => {
 module.exports = () => {
   const inicio = dayjs()
   return repository().then(async facturacioMasivasDetalle => {
-    console.log('facturacioMasivasCapita', facturacioMasivasDetalle);
     if(!facturacioMasivasDetalle.length)  return console.log('NO HAY FACTURAS CAPITA POR ENVIAR A SAP')
+    console.log('VA A FACTURAR EN CAPITA--->', facturacioMasivasDetalle);
     let promises = []
     for (const item of facturacioMasivasDetalle) {
       console.log('se va a mandar------------>', item.id)
