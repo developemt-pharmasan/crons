@@ -6,21 +6,15 @@ const updateFacturacionMasivaResponseDetalleOvSapRepository = require("../infras
 module.exports = () => {
   return factMaxDetEvt().then(async (factura) => {
     if(!factura)  return console.log('NO HAY FACTURAS EVENTO/CAPITA POR ENVIAR A SAP')
-    // const options = {
-    //   method: 'POST',
-    //   url: process.env.FACTURACION_HOST,
-    //   headers: { 'Content-Type': 'application/json' },
-    //   data: factura.json
-    // };
+    console.log('VA A FACTURAR EN EVENTO/CAPITA ---->', factura)
     const options = {
       method: 'POST',
       url: `${process.env.SERVICE_LAYER_HOST}/invoices`,
       headers: { 'Content-Type': 'application/json', 'company': 'PRUEBAS_PHARMA', 'module': 'Facturacion masiva', 'type': 'Invoices' },
       data: factura.json
     };
-      const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${factura.id}`
-      await sequelize.query(sql)
-      console.log('procesando id----', factura)
+    const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${factura.id}`
+    await sequelize.query(sql)
     return  axios.request(options).then(async (responseSap) => {
       await updateRepository({
         id: factura.id,
