@@ -5,8 +5,7 @@ const updateRepository = require("../infrastructure/repository/updateFacturacion
 const updateFacturacionMasivaResponseDetalleOvSapRepository = require("../infrastructure/repository/updateFacturacionMasivaResponseDetalleOvSapRepository");
 module.exports = async () => {
   return await factMaxDetEvt().then(async factura => {
-    if(!factura)  throw new Error('NO HAY FACTURAS PAGO PROSPECTIVO NO PBS POR ENVIAR A SAP')
-    console.log('VA A FACTURAR EN PAGO PROSPECTIVO NO PBS--------->', factura)
+    if(!factura) return console.log('NO HAY FACTURAS PAGO PROSPECTIVO NO PBS POR ENVIAR A SAP')
     const detalle = factura
     const options = {
       method: 'POST',

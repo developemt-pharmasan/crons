@@ -5,7 +5,7 @@ const updateRepository = require("../infrastructure/repository/updateFacturacion
 const updateFacturacionMasivaResponseDetalleOvSapRepository = require("../infrastructure/repository/updateFacturacionMasivaResponseDetalleOvSapRepository");
 module.exports = async () => {
   return await factMaxDetEvt().then(async factura => {
-    if(!factura)  throw new Error('NO HAY FACTURAS EVENTO POR ENVIAR A SAP')
+    if(!factura) return console.log('NO HAY FACTURAS EVENTO POR ENVIAR A SAP')
     console.log('VA A FACTURAR EN EVENTO--------->', factura)
     const detalle = factura
     const options = {
