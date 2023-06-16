@@ -5,8 +5,7 @@ const updateRepository = require("../infrastructure/repository/updateFacturacion
 const updateFacturacionMasivaResponseDetalleOvSapRepository = require("../infrastructure/repository/updateFacturacionMasivaResponseDetalleOvSapRepository");
 module.exports = async () => {
   return await factMaxDetEvt().then(async factura => {
-    console.log('factura--------->', factura)
-    if(!factura)  throw new Error('NO HAY FACTURAS EVENTO POR ENVIAR A SAP')
+    if(!factura) return console.log('NO HAY FACTURAS PAGO PROSPECTIVO NO PBS POR ENVIAR A SAP')
     const detalle = factura
     const options = {
       method: 'POST',
@@ -14,10 +13,7 @@ module.exports = async () => {
       headers: { 'Content-Type': 'application/json', 'company': 'PRUEBAS_PHARMA', 'module': 'Facturacion masiva', 'type': 'Invoices' },
       data: factura.json
     };
-    console.log('options-------->', options)
     const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${detalle.id}`
-    console.log('FACTURANDO ID -->', detalle.id)
-    // return sequelize.query(sql)
     await sequelize.query(sql)
     const actualizarService = () => {
       return sequelize.query(sql)

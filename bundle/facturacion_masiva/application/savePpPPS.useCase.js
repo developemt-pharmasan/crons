@@ -40,11 +40,10 @@ const crearJson = async (grupo) => {
 module.exports = () => {
   const inicio = dayjs()
   return repository().then(async facturacioMasivasDetalle => {
-    console.log('facturacioMasivasCapita', facturacioMasivasDetalle);
     if(!facturacioMasivasDetalle.length)  return console.log('NO HAY FACTURAS PAGO PROSPECTIVO PBS POR ENVIAR A SAP')
+    console.log('VA A FACTURAR EN PAGO PROSPECTIVO PBS--->', facturacioMasivasDetalle);
     let promises = []
     for (const item of facturacioMasivasDetalle) {
-      console.log('se va a mandar------------>', item.id)
       const json = await crearJson(item)
       if (json === 'Error al facturar, revisa si estas ordenes ya cuenta con una factura' || json === 'No se encontraron ordenes al crear el json') {
         console.log('ERROR AL CREAR EL JSON-->', item)
