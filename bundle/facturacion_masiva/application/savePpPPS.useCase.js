@@ -1,4 +1,4 @@
-const repository = require('../infrastructure/repository/listarFacturacionMasivaRepository')
+const repository = require('../infrastructure/repository/listarFacturacionMasivaRepositoryPpPBS')
 const obtenerOrdenesRepositorio = require('../infrastructure/repository/obtenerOrdenesRepository')
 const updateRepository = require('../infrastructure/repository/updateFacturacionMasivaResponseSapRepository')
 const updateJson = require('../infrastructure/repository/updateJsonCapita.repository')
@@ -13,7 +13,6 @@ const obtenerLineasDocumento = async(ordenes) => {
 }
 const crearJson = async (grupo) => {
   const ordenes = await obtenerOrdenesRepositorio(grupo.id)
-  console.log('ordenes ---> ', ordenes);
   if (!ordenes.length) return 'No se encontraron ordenes al crear el json'
   let DocumentLines = await obtenerLineasDocumento(ordenes)
   if (!DocumentLines.length) return 'Error al facturar, revisa si estas ordenes ya cuenta con una factura'
@@ -41,11 +40,10 @@ const crearJson = async (grupo) => {
 module.exports = () => {
   const inicio = dayjs()
   return repository().then(async facturacioMasivasDetalle => {
-    if(!facturacioMasivasDetalle.length)  return console.log('NO HAY FACTURAS CAPITA POR ENVIAR A SAP')
-    console.log('VA A FACTURAR EN CAPITA--->', facturacioMasivasDetalle);
+    if(!facturacioMasivasDetalle.length)  return console.log('NO HAY FACTURAS PAGO PROSPECTIVO PBS POR ENVIAR A SAP')
+    console.log('VA A FACTURAR EN PAGO PROSPECTIVO PBS--->', facturacioMasivasDetalle);
     let promises = []
     for (const item of facturacioMasivasDetalle) {
-      console.log('se va a mandar------------>', item.id)
       const json = await crearJson(item)
       if (json === 'Error al facturar, revisa si estas ordenes ya cuenta con una factura' || json === 'No se encontraron ordenes al crear el json') {
         console.log('ERROR AL CREAR EL JSON-->', item)
@@ -180,6 +178,7 @@ module.exports = () => {
             console.log("FACTURA DE CAPITA GENERADA...",resp.data ? resp.data : " FALLO ");
           } else {
             console.log('NO TIENE FACTURA CTCH-->', error.response)
+            console.log('hasta aqui', error.response.data)
             const responseDetalle = updateRepository({
               id: item.id,
               NumFacturaResponse: null,

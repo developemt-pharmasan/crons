@@ -4,7 +4,7 @@ from
 	"FacturacionMasivaDetalles" t0
 inner join "FacturacionMasivas" t1 on
 	t0."facturacionMasivaId" = t1."id"
-	and t1."tipoFacturacionMasiva" in (3)
+	and t1."tipoFacturacionMasiva" in (4)
 where
 	(t0."estado" = 0
 		or t0."estado" is null)
@@ -18,7 +18,7 @@ where
 		s1."facturacionMasivaId" = s2."id"
 	where
 		s1."serviceLayer" = true
-		and s2."tipoFacturacionMasiva" in (3)
+		and s2."tipoFacturacionMasiva" in (4)
 			and (s1."estado" = 0
 				or s1."estado" is null)
           ) = 0
