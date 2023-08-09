@@ -13,6 +13,7 @@ const obtenerLineasDocumento = async(ordenes) => {
 }
 const crearJson = async (grupo) => {
   const ordenes = await obtenerOrdenesRepositorio(grupo.id)
+  console.log('ordenes ---> ', ordenes);
   if (!ordenes.length) return 'No se encontraron ordenes al crear el json'
   let DocumentLines = await obtenerLineasDocumento(ordenes)
   if (!DocumentLines.length) return 'Error al facturar, revisa si estas ordenes ya cuenta con una factura'
