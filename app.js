@@ -11,6 +11,7 @@ const saveFacturacionMasivaEventoCapita = require('./bundle/facturacion_masiva/a
 // const reporteEntregaFecha = require('./bundle/mipres/application/reporteEntregaMipresUseCase')
 // const updateTmpMipres = require('./bundle/mipres/application/updateTempMipresUseCase')
 // const compararDireccionamientoEstado = require('./bundle/mipres/application/compararDireccionamientoMipresUseCase')
+// const syncEntregasMasivas = require('./bundle/entregas-masivas/application/syncEntregasMasivasUseCase')
 
 // const {hanaTestConnection} = require('./database/hanaClient')
 
@@ -24,6 +25,7 @@ cron.schedule('*/50 * * * * 6,0', savefacturacionMasivaCapita) // cada 50 segund
 cron.schedule('* * * * * *', saveSapEvento) // cada segundo
 cron.schedule('* * * * * *', saveFacturacionMasivaEventoCapita) // cada segundo
 // cron.schedule('*/1 * * * *', saveSapEvento) // cada 20 minutos
+// cron.schedule(' */1 * * * *', syncEntregasMasivas) // 
 
 
 // cron.schedule('*/1 * * * *', saveSegfacturacionSapUseCase) // cada 1 minuto
