@@ -34,12 +34,12 @@ module.exports = async () => {
         if (error.response) {
           console.log(error.response.data);
           const mensage = error.response.data.message ?? 'ERROR: code: 666 ; message: Problemas para conectar con SAP'
-          const sql = `update sap_business."OV_SYNC" set "Status" = 3, "ServicelayerResponse"  = '${mensage}' where "Id" = ${detalle.Id}`
+          const sql = `update sap_business."OV_SYNC" set "Status" = 3, "ServicelayerResponse"  = '${mensage.replace(/'/g, '')}' where "Id" = ${detalle.Id}`
           sequelize.query(sql)
         } else if (error.request) {
           // console.log(error.request);
           const mensage = error.request.message ?? 'ERROR: code: 666 ; message: Problemas para conectar con SAP'
-          const sql = `update sap_business."OV_SYNC" set "Status" = 3, "ServicelayerResponse"  = '${mensage}' where "Id" = ${detalle.Id} `
+          const sql = `update sap_business."OV_SYNC" set "Status" = 3, "ServicelayerResponse"  = '${mensage.replace(/'/g, '')}' where "Id" = ${detalle.Id} `
           sequelize.query(sql)
         } else {
           const sql = `update sap_business."OV_SYNC" set "Status" = 3, "ServicelayerResponse"  = 'Error desconocido' where "Id" = ${detalle.Id} `
