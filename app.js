@@ -14,6 +14,8 @@ const saveFacturacionMasivaEventoCapita = require('./bundle/facturacion_masiva/a
 // const syncEntregasMasivas = require('./bundle/entregas-masivas/application/syncEntregasMasivasUseCase')
 
 // const {hanaTestConnection} = require('./database/hanaClient')
+const OrdrSync = require('./bundle/ordrSync/applications/ordrSync.usecase')
+const PagosSync = require('./bundle/pagosSync/applications/pagosSync.usecase')
 
 // cron.schedule('0 7 * * *',nextScheduledPaymentsUseCase) // produccion 07:00 am
 // cron.schedule('0 7 * * *', requestsCreateRankDaysAlertUseCase) // produccion 07:00 am
@@ -41,4 +43,8 @@ cron.schedule('* * * * * *', saveFacturacionMasivaEventoCapita) // cada segundo
 // cron.schedule('*/1 * * * *', compararDireccionamientoEstado) // cada 1 minuto
 
 // cron.schedule('*/1 * * * *', hanaTestConnection) // cada 1 minuto
+
+// cron.schedule('* * * * *', OrdrSync) // cada 1 minuto para producion todos los dias a 6 pm
+// cron.schedule('* * * * *', PagosSync) // cada 1 minuto producion todos los dias a 6 pm
+
 
