@@ -34,171 +34,112 @@ const crearJson = async (grupo) => {
         WarehouseCode: DocumentLines[0].WarehouseCode
     }
   )
-  grupo.json.DocumentLines = DocumentLines
+  grupo.json.Document.DocumentLines = DocumentLines
   await updateJson(grupo.id, JSON.stringify(grupo.json))
   return grupo.json
 }
 module.exports = () => {
   const inicio = dayjs()
   return repository().then(async facturacioMasivasDetalle => {
+    console.log('facturacioMasivasCapita', facturacioMasivasDetalle);
     if(!facturacioMasivasDetalle.length)  return console.log('NO HAY FACTURAS CAPITA POR ENVIAR A SAP')
     console.log('VA A FACTURAR EN CAPITA--->', facturacioMasivasDetalle);
     let promises = []
     for (const item of facturacioMasivasDetalle) {
-      console.log('se va a mandar------------>', item.id)
       const json = await crearJson(item)
-      if (json === 'Error al facturar, revisa si estas ordenes ya cuenta con una factura' || json === 'No se encontraron ordenes al crear el json') {
-        console.log('ERROR AL CREAR EL JSON-->', item)
-        if (item.NumFacturaResponse) {
-          console.log('YA CONTIENE FACTURA EJ-->', item.NumFacturaResponse)
-          const responseDetalle = updateRepository({
-            id: item.id,
-            NumFacturaResponse: item.NumFacturaResponse,
-            response: 'OK',
-            estado: 1,
-            serviceLayer: false
-          })
-          promises.push(responseDetalle)
-          const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
-            facturacionMasivaDetalleId: item.id,
-            NumFactura: item.NumFacturaResponse,
-            Comentarios: 'OK',
-            Estado: 1
-          })
-          promises.push(responseDetalleOv)
-        } else {
-          console.log('NO CONTIENE FACTURA EJ-->', item.NumFacturaResponse)
-          const responseDetalle = updateRepository({
-            id: item.id,
-            NumFacturaResponse: null,
-            response: json,
-            estado: 2,
-            serviceLayer: false
-          })
-          promises.push(responseDetalle)
-          const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
-            facturacionMasivaDetalleId: item.id,
-            NumFactura: null,
-            Comentarios: json,
-            Estado: 2
-          })
-  
-          // console.log("FACTURA DE CAPITA GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
-          promises.push(responseDetalleOv)
-        }
+      if (json === 'Error al facturar, revisa si estas ordenes ya cuenta con una factura') {
+        const responseDetalle = updateRepository({
+          id: item.id,
+          NumFacturaResponse: null,
+          response: json,
+          estado: 2,
+          serviceLayer: false
+        })
+        promises.push(responseDetalle)
+        const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
+          facturacionMasivaDetalleId: item.id,
+          NumFactura: null,
+          Comentarios: json,
+          Estado: 2
+        })
+
+        // console.log("FACTURA DE CAPITA GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
+        promises.push(responseDetalleOv)
       } else {
-        console.log('JSON CREADO CORRECTAMENTE-->', item)
         const options = {
           method: 'POST',
-          url: `${process.env.SERVICE_LAYER_HOST}/invoices`,
-          headers: { 'Content-Type': 'application/json', 'company': 'PRUEBAS_PHARMA', 'module': 'Facturacion masiva', 'type': 'Invoices' },
+          url: process.env.FACTURACION_HOST,
+          headers: { 'Content-Type': 'application/json' },
           data: json
         };
+        
         const sql = `update "FacturacionMasivaDetalles" set "serviceLayer" = true where id = ${item.id}`
         await sequelize.query(sql, {
           type: Sequelize.QueryTypes.SELECT
         })
         
-        await axios.request(options).then(resp => {
-          console.log('la respuesta de la facturacion---then------------', resp.data)
-          if (resp.data.DocNum) {
-            const responseDetalle = updateRepository({
-              id: item.id,
-              NumFacturaResponse: resp.data.DocNum,
-              response: 'OK',
-              estado: 1,
-              serviceLayer: false
-            })
-            promises.push(responseDetalle)
-            const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
-              facturacionMasivaDetalleId: item.id,
-              NumFactura: resp.data.DocNum,
-              Comentarios: 'OK',
-              Estado: 1
-            })
-            promises.push(responseDetalleOv)
-            console.log('FACTURA CREADA CORRECTAMENTE-->', resp.data)
-            // console.log("FACTURA DE CAPITA GENERADA...",resp.data ? resp.data : " FALLO ");
-          } else {
-            if (item.NumFacturaResponse) {
-              console.log('YA CONTIENE FACTURA JC-->', item.NumFacturaResponse)
-              const responseDetalle = updateRepository({
-                id: item.id,
-                NumFacturaResponse: item.NumFacturaResponse,
-                response: 'OK',
-                estado: 1,
-                serviceLayer: false
-              })
-              promises.push(responseDetalle)
-              const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
-                facturacionMasivaDetalleId: item.id,
-                NumFactura: item.NumFacturaResponse,
-                Comentarios: 'OK',
-                Estado: 1
-              })
-              promises.push(responseDetalleOv)
-            } else {
-              console.log('NO CONTIENE FACTURA JC-->', item.NumFacturaResponse)
-              const responseDetalle = updateRepository({
-                id: item.id,
-                NumFacturaResponse: null,
-                response: resp.data.Descripcion,
-                estado: 2,
-                serviceLayer: false
-              })
-              promises.push(responseDetalle)
-              const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
-                facturacionMasivaDetalleId: item.id,
-                NumFactura: null,
-                Comentarios: resp.data.Descripcion,
-                Estado: 2
-              })
-              promises.push(responseDetalleOv)
-            }
-            console.log('ERROR AL CREAR LA FACTURA JC-->', resp.data)
-          }
+        const responseSap = await axios.request(options).then(resp => {
+          console.log('la respuesta de la facturacion---then------------', resp)
+          const responseDetalle = updateRepository({
+            id: item.id,
+            NumFacturaResponse: resp.data.DocNum ? resp.data.DocNum : null,
+            response: resp.data.Descripcion,
+            estado: resp.data.DocNum ? 1 : 2,
+            serviceLayer: false
+          })
+          promises.push(responseDetalle)
+          const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
+            facturacionMasivaDetalleId: item.id,
+            NumFactura: resp.data.DocNum ? resp.data.DocNum : null,
+            Comentarios: resp.data.Descripcion,
+            Estado: resp.data.DocNum ? 1 : 2
+          })
+          promises.push(responseDetalleOv)
+          console.log("FACTURA DE CAPITA GENERADA...",resp.data ? resp.data : " FALLO ");
         })
         .catch((error) => {
-          console.log('ERROR DE CATCH --->', error)
-          if (item.NumFacturaResponse) {
-            console.log('YA TIENE FACTURA CTCH-->', resp.data)
-            const responseDetalle = updateRepository({
-              id: item.id,
-              NumFacturaResponse: item.NumFacturaResponse,
-              response: 'OK',
-              estado: 1,
-              serviceLayer: false
-            })
-            promises.push(responseDetalle)
-            const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
-              facturacionMasivaDetalleId: item.id,
-              NumFactura: item.NumFacturaResponse,
-              Comentarios: 'OK',
-              Estado: 1
-            })
-            promises.push(responseDetalleOv)
-            console.log("FACTURA DE CAPITA GENERADA...",resp.data ? resp.data : " FALLO ");
-          } else {
-            console.log('NO TIENE FACTURA CTCH-->', error.response)
-            const responseDetalle = updateRepository({
-              id: item.id,
-              NumFacturaResponse: null,
-              response: error.response ? error.response.data.message : 'Error desconocido',
-              estado: 2,
-              serviceLayer: false
-            })
-            promises.push(responseDetalle)
-    
-            const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
-              facturacionMasivaDetalleId: item.id,
-              NumFactura: null,
-              Comentarios: error.response ? error.response.data.message : 'Error desconocido',
-              Estado: 2
-            })
-            promises.push(responseDetalleOv)
-          }
-          
+          console.log('catch---error--', error)
+          const responseDetalle = updateRepository({
+            id: item.id,
+            NumFacturaResponse: null,
+            response: error.response ? error.response.data.Descripcion : error.data.Descripcion,
+            estado: 2,
+            serviceLayer: false
+          })
+          promises.push(responseDetalle)
+  
+          const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
+            facturacionMasivaDetalleId: item.id,
+            NumFactura: null,
+            Comentarios: error.response ? error.response.data.Descripcion : error.data.Descripcion,
+            Estado: 2
+          })
+          promises.push(responseDetalleOv)
+  
         });
+        console.log('responseSap----------------', responseSap)
+  
+        // if (responseSap) {
+  
+          // const responseDetalle = updateRepository({
+          //   id: item.id,
+          //   NumFacturaResponse: responseSap.data.DocNum ? responseSap.data.DocNum : null,
+          //   response: responseSap.data.Descripcion,
+          //   estado: responseSap.data.DocNum ? 1 : 2,
+          //   serviceLayer: false
+          // })
+          // promises.push(responseDetalle)
+          // const responseDetalleOv = updateFacturacionMasivaResponseDetalleOvSapRepository({
+          //   facturacionMasivaDetalleId: item.id,
+          //   NumFactura: responseSap.data.DocNum ? responseSap.data.DocNum : null,
+          //   Comentarios: responseSap.data.Descripcion,
+          //   Estado: responseSap.data.DocNum ? 1 : 2
+          // })
+  
+          // console.log("FACTURA DE CAPITA GENERADA...",responseSap.data ? responseSap.data : " FALLO ");
+          // promises.push(responseDetalleOv)
+  
+        // }
       }
     }
     Promise.all(promises).then((res) =>{
@@ -206,10 +147,7 @@ module.exports = () => {
       console.log('AQUI TERMINA DE FATURAR-------------------------', res)
     })
 
-  }).catch(err => {
-    console.log('ENTRO POR EL CATCH------------>', err)
-    console.error(err)
-  })
+  }).catch(err => console.error(err))
 }
 
 
