@@ -21,13 +21,25 @@ class Orders {
           DocNum: data.DocNum,
         }
       })
-      .catch((err) => {
-        console.log('catch',err)
-        const {response,message} = err
-        const msj = response.data ? response.data.error.message.value : message;
-        return {
-          message: msj,
-          status: response.status || 500,
+      .catch((error) => {        
+        if (error.response) {
+          return {
+            message: error.response.data.message,
+            status: error.response.status || 500,
+          }
+        } else if (error.request) {
+          // La petición fue hecha pero no se recibió respuesta
+          // `error.request` es una instancia de XMLHttpRequest en el navegador y una instancia de
+          return {
+            message: JSON.stringify(error.request),
+            status: 500,
+          }
+        } else {
+          // Algo paso al preparar la petición que lanzo un Error
+          return {
+            message: error.message,
+            status: 500,
+          }
         }
       })
   }
