@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'OrdrSync',
     tableName: 'ORDR_SYNC',
-    schema: 'sap_business',
+    schema: 'sap_sync',
     timestamps: false
   })
   return OrdrSync
