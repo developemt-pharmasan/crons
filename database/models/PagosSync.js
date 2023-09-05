@@ -19,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
 	  Status: DataTypes.INTEGER,
 	  CreatedBy: DataTypes.INTEGER,
 	  NumOv: DataTypes.INTEGER,
-      Valor: DataTypes.INTEGER,
-      CreatedAt: DataTypes.DATE,
-      DocNum: DataTypes.INTEGER,
-      DocEntry: DataTypes.INTEGER,
-      Consignacion: DataTypes.STRING
+    Valor: DataTypes.INTEGER,
+    CreatedAt: DataTypes.DATE,
+    DocNum: DataTypes.INTEGER,
+    DocEntry: DataTypes.INTEGER,
+    Consignacion: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'PagosSync',
