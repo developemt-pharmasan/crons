@@ -5,7 +5,10 @@ module.exports = async () => {
   const _Orders = new Orders()
   const _ordrList = await ordrList()
   for (const element of _ordrList) {
-    const result = await _Orders.create(JSON.parse(element.TextJson))
+    const data = {
+      ...JSON.parse(element.TextJson)
+    }
+    const result = await _Orders.create(data)
     // console.log({result})
     await ordrSave(result,element)
   }
