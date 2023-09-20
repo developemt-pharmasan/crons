@@ -23,11 +23,12 @@ module.exports = (sequelize, DataTypes) => {
     CreatedAt: DataTypes.DATE,
     DocNum: DataTypes.INTEGER,
     DocEntry: DataTypes.INTEGER,
+    Consignacion: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'PagosSync',
-    tableName: 'PAGOS_SYNC',
-    schema: 'sap_business',
+    tableName: 'ORCT_SYNC',
+    schema: 'sap_sync',
     timestamps: false
   })
   return PagosSync
