@@ -47,11 +47,11 @@ cron.schedule('* * * * * *', saveFacturacionMasivaEventoCapita) // cada segundo
 cron.schedule('0 * * * *', OrdrSync,{
   scheduled: true,
   timezone: "America/Bogota"
-}) // cada 1 minuto para producion todos los dias a 6 pm
-// cron.schedule('0 * * * *', OrdrSync, {
-//   scheduled: true,  // Inicia la tarea programada inmediatamente
-//   timezone: "America/Bogota"  // Zona horaria de Bogotá
-// }) // cada 1 minuto para producion todos los dias a 6 pm
-// cron.schedule('0 23 * * *', PagosSync) // cada 1 minuto producion todos los dias a 6 pm
+}) // significa que se ejecutará al comienzo de cada hora 
+
+cron.schedule('* * * * *', PagosSync,{
+  scheduled: true,
+  timezone: "America/Bogota"
+}) 
 
 
