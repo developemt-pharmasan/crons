@@ -44,7 +44,7 @@ cron.schedule('* * * * * *', saveFacturacionMasivaEventoCapita) // cada segundo
 
 // cron.schedule('*/1 * * * *', hanaTestConnection) // cada 1 minuto
 
-cron.schedule('0 * * * *', OrdrSync,{
+cron.schedule('* * * * *', OrdrSync,{
   scheduled: true,
   timezone: "America/Bogota"
 }) // significa que se ejecutará al comienzo de cada hora 
