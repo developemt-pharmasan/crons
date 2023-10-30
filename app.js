@@ -21,6 +21,7 @@ const PagosSync = require('./bundle/pagosSync/applications/pagosSync.usecase')
 const OinvSyncSegupharma = require('./bundle/segupharma/applications/oinvSycn.usecase')
 const crearPendientesCapita = require('./bundle/intranet.pharmasan.net/applications/creacionPendientesCapita.usecase')
 const crearPendientesEvento = require('./bundle/intranet.pharmasan.net/applications/creacionPendientesEvento.usecase')
+const crearPendientes = require('./bundle/intranet.pharmasan.net/applications/creacionPendientes.usecase')
 // cron.schedule('0 7 * * *',nextScheduledPaymentsUseCase) // produccion 07:00 am
 // cron.schedule('0 7 * * *', requestsCreateRankDaysAlertUseCase) // produccion 07:00 am
 // cron.schedule('* * *', correosInformativosUseCase) // cada hora
@@ -77,6 +78,10 @@ cron.schedule('*/5 * * * * *', crearPendientesCapita,{
   timezone: "America/Bogota"
 })
 cron.schedule('*/5 * * * * *', crearPendientesEvento,{
+  scheduled: true,
+  timezone: "America/Bogota"
+})
+cron.schedule('*/5 * * * * *', crearPendientes,{
   scheduled: true,
   timezone: "America/Bogota"
 }) 
