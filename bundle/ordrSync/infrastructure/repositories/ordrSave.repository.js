@@ -1,4 +1,5 @@
 const { OrdrSync } = require('../../../../database/models')
+const { Op } = require("sequelize");
 module.exports = async (data, {Id}) => {
   // console.log('DocNum', data.DocNum)
   return OrdrSync.update({
@@ -8,7 +9,10 @@ module.exports = async (data, {Id}) => {
     DocEntry: data.DocEntry ?? null,
   },{
     where:{
-      Id
+      Id,
+      DocNum: {
+        [Op.is]: null
+      }
     }
   })
 }
