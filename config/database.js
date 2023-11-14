@@ -10,7 +10,8 @@ module.exports = {
     dialect: 'postgres',
     dialectOptions: {
       bigNumberStrings: true
-    }
+    },
+    logging: console.log,
   },
   test: {
     username: process.env.CI_DB_USERNAME,

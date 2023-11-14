@@ -4,7 +4,7 @@ services:
   app-crons-service:
     container_name: app-crons-service
     build: .
-    command: npm run start
+    command: npm run prod
     env_file: .env
     restart: always
     ports:
