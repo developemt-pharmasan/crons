@@ -18,6 +18,7 @@ const saveFacturacionMasivaEventoCapita = require('./bundle/facturacion_masiva/a
 const OrdrSync = require('./bundle/ordrSync/applications/ordrSync.usecase')
 const OrdrRegister = require('./bundle/ordrSync/applications/registroOv.usecase')
 const PagosSync = require('./bundle/pagosSync/applications/pagosSync.usecase')
+const entradaMercancia = require('./bundle/entradas_mercancia/applications/saveEntradaMercancia.useCase')
 const OinvSyncSegupharma = require('./bundle/segupharma/applications/oinvSycn.usecase')
 const crearPendientesCapita = require('./bundle/intranet.pharmasan.net/applications/creacionPendientesCapita.usecase')
 const crearPendientesEvento = require('./bundle/intranet.pharmasan.net/applications/creacionPendientesEvento.usecase')
@@ -48,6 +49,12 @@ cron.schedule('* * * * * *', saveFacturacionMasivaEventoCapita) // cada segundo
 // cron.schedule('*/1 * * * *', compararDireccionamientoEstado) // cada 1 minuto
 
 // cron.schedule('*/1 * * * *', hanaTestConnection) // cada 1 minuto
+
+// Crear entradas de mercancia cada 2 minutos de la preliminar
+cron.schedule('*/2 * * * *', entradaMercancia,{
+  scheduled: true,
+  timezone: "America/Bogota"
+})
 
 /** registro de ovs de PG en SAP todos los dias a la 1 am **/
 cron.schedule('0 1 * * *', OrdrRegister,{
