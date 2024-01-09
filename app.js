@@ -33,7 +33,7 @@ cron.schedule('*/50 * * * * 6,0', savefacturacionMasivaCapita) // cada 50 segund
 cron.schedule('* * * * * *', saveSapEvento) // cada segundo
 cron.schedule('* * * * * *', saveFacturacionMasivaEventoCapita) // cada segundo
 // cron.schedule('*/1 * * * *', saveSapEvento) // cada 20 minutos
-// cron.schedule(' */1 * * * *', syncEntregasMasivas) // 
+// cron.schedule(' */1 * * * *', syncEntregasMasivas) //
 
 
 // cron.schedule('*/1 * * * *', saveSegfacturacionSapUseCase) // cada 1 minuto
@@ -66,7 +66,13 @@ cron.schedule('0 3 * * *', OrdrSync,{
   scheduled: true,
   timezone: "America/Bogota"
 })
- 
+
+/** todos los dias a la 14 pm **/
+cron.schedule('0 14 * * *', OrdrSync,{
+  scheduled: true,
+  timezone: "America/Bogota"
+})
+
 /** pagos de cuotas **/
 cron.schedule('* * * * *', PagosSync,{
   scheduled: true,
@@ -80,18 +86,18 @@ cron.schedule('* * * * *', OinvSyncSegupharma,{
 })
 
 /** intranet pahrmasan .net **/
-cron.schedule('*/5 * * * * *', crearPendientesCapita,{
+/*cron.schedule('*!/5 * * * * *', crearPendientesCapita,{
   scheduled: true,
   timezone: "America/Bogota"
 })
-cron.schedule('*/5 * * * * *', crearPendientesEvento,{
+cron.schedule('*!/5 * * * * *', crearPendientesEvento,{
   scheduled: true,
   timezone: "America/Bogota"
-})
+})*/
 cron.schedule('*/5 * * * * *', crearPendientes,{
   scheduled: true,
   timezone: "America/Bogota"
-}) 
+})
 
 /*** **/
 

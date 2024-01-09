@@ -8,7 +8,7 @@ class PurchaseDeliveryNotes {
     return axios.post(`${baseurl}/purchase-delivery-notes`, data, {
       headers: {
         'Content-Type': 'application/json',
-        'company': 'PRUEBAS_PHARMA', // process.env.SERVICE_SLAYER_COMPANY,
+        'company': process.env.SERVICE_SLAYER_COMPANY, // 'PRUEBAS_PHARMA',
         'module': 'Compras - Logistica - Cargue Facturas',
         'type': 'PurchaseDeliveryNotes - Entrada de Mercancia'
       }
