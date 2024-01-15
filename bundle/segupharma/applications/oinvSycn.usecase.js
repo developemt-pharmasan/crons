@@ -6,7 +6,7 @@ const Invoices = require('../services/index')
 const invoices = new Invoices()
 module.exports = async () => {
   const _listPending  = await listPending()
-  // console.log('_listPending', _listPending.length)
+  console.log('_listPending', _listPending.length)
   for (const item of _listPending) {
     invoices.create(JSON.parse(item.TextJson)).then((response) => {
       let data = {}

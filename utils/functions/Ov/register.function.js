@@ -42,25 +42,40 @@ module.exports = async (data) => {
       "DocumentLines": data.DocumentLines.map(x => {
         return {
           "ItemCode": x.ItemCode,
+          "WarehouseCode": x.WarehouseCode,
           "Quantity": x.Quantity,
           "UnitPrice": x.UnitPrice, // -> lista precio * numinSale
-          "WarehouseCode": x.WarehouseCode,
-          "CostingCode": x.CostingCode,
+          "U_PHR_SeguiEntrega": x.U_PHR_SeguiEntrega,
           "U_PHR_NumEntregas": x.U_PHR_NumEntregas,
           "U_PHR_Exonerado": x.U_PHR_Exonerado,
-          "U_PHR_Frecuencia": x.U_PHR_Frecuencia,
+          "U_PHR_CuotaRecupe": x.U_PHR_CuotaRecupe,
           "U_PHR_CtdPrescrita": x.U_PHR_CtdPrescrita,
+          "U_PHR_FecPrescrip": x.U_PHR_FecPrescrip,
+          "U_PHR_Frecuencia": x.U_PHR_Frecuencia,
+          "U_PHR_DuraTratami": x.U_PHR_DuraTratami,
+          "U_PHR_CtoAsociado": x.U_PHR_CtoAsociado,
+          "U_PHR_CdHomologo": x.U_PHR_CdHomologo,
+          "U_PHR_NomHomologo": x.U_PHR_NomHomologo,
+          "U_PHR_CntHomologo": x.U_PHR_CntHomologo,
+          "U_PHR_PrHomologo": x.U_PHR_PrHomologo,
+          "U_PHR_TotalHomologo": x.U_PHR_TotalHomologo,
+          "U_PHR_NumAutoriza": x.U_PHR_NumAutoriza ? x.U_PHR_NumAutoriza : '',
+          "U_PHR_FecAutoriza": x.U_PHR_FecAutoriza ? x.U_PHR_FecAutoriza : '',
+          "U_PHR_NoAcCTC": x.U_PHR_NoAcCTC,
+          "U_PHR_FchAcCTC": x.U_PHR_FchAcCTC,
+          "U_PHR_FchSolActCTC": x.U_PHR_FchSolActCTC,
+          "U_PHR_CodMipres": x.U_PHR_CodMipres,
+          "U_PHR_NumDirec": x.U_PHR_NumDirec,
+          "U_PHR_FecPres": x.U_PHR_FecPres,
+          "U_PHR_JunMedi": x.U_PHR_JunMedi,
+          "U_PHR_Siniestro": x.U_PHR_Siniestro,
+          "CostingCode": x.CostingCode,
+          "U_PHR_Sta_Pen": x.ItemCode.includes('CT') ? null : 1, // marcar como pendiente
           "U_PHR_RegMed": x.U_PHR_RegMed,
           "U_PHR_NomMed": x.Medico ? x.Medico.NomMedico : '',
           "U_PHR_IPSPrest": x.Ips ? x.Ips.NomIps : '',
-          "U_PHR_CuotaRecupe": x.U_PHR_CuotaRecupe,
-          "U_PHR_SeguiEntrega": x.U_PHR_SeguiEntrega,
-          "U_PHR_FecPrescrip": x.U_PHR_FecPrescrip,
-          "U_PHR_DuraTratami": x.U_PHR_DuraTratami,
-          "U_PHR_CtoAsociado": x.U_PHR_CtoAsociado,
-          "U_PHR_Sta_Pen": x.ItemCode.includes('CT') ? null : 1, // marcar como pendiente
           "U_PG_IdOvDt": x.Id,
-          "U_PG_IdOv": data.Id
+          "U_PG_IdOv": data.Id,
         }
       })
     }
