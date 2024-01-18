@@ -11,7 +11,7 @@ module.exports = {
     dialectOptions: {
       bigNumberStrings: true
     },
-    logging: console.log,
+    logging: false,
   },
   test: {
     username: process.env.CI_DB_USERNAME,

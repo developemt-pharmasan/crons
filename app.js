@@ -14,6 +14,8 @@ const OinvSyncSegupharma = require('./bundle/segupharma/applications/oinvSycn.us
 const crearPendientesCapita = require('./bundle/intranet.pharmasan.net/applications/creacionPendientesCapita.usecase')
 const crearPendientesEvento = require('./bundle/intranet.pharmasan.net/applications/creacionPendientesEvento.usecase')
 const crearPendientes = require('./bundle/intranet.pharmasan.net/applications/creacionPendientes.usecase')
+const odlnRegister = require('./bundle/odlnSycn/applications/register.usecase')
+const syncOdln = require('./bundle/odlnSycn/applications/syncOdln.usecase')
 
 console.log('start...' + dayjs().format('YYYY-MM-DD'))
 cron.schedule('*/2 * * * 1-5', savefacturacionMasivaCapita) // cada 1 minuto
@@ -62,5 +64,16 @@ cron.schedule('*/5 * * * * *', crearPendientes,{
   timezone: "America/Bogota"
 })
 
+/** todos los dias a la 13 hrs **/
+cron.schedule('0 13 * * *', odlnRegister,{
+  scheduled: true,
+  timezone: "America/Bogota"
+})
+
+/** todos los dias a la 14 hrs **/
+cron.schedule('0 14 * * *', syncOdln,{
+  scheduled: true,
+  timezone: "America/Bogota"
+})
 
 
