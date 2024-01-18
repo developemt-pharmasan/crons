@@ -32,14 +32,14 @@ cron.schedule('0 1 * * *', OrdrRegister,{
   scheduled: true,
   timezone: "America/Bogota"
 })
-/** todos los dias a la 3 am **/
-cron.schedule('0 3 * * *', OrdrSync,{
+/** todos los dias a la 2 am **/
+cron.schedule('0 2 * * *', OrdrSync,{
   scheduled: true,
   timezone: "America/Bogota"
 })
 
-/** todos los dias a la 14 pm **/
-cron.schedule('0 14 * * *', OrdrSync,{
+/** todos los dias a la 10 am **/
+cron.schedule('0 10 * * *', OrdrSync,{
   scheduled: true,
   timezone: "America/Bogota"
 })
